@@ -1,3 +1,5 @@
+import { NotFoundException } from "@nestjs/common";
+import { ApiResponse } from "@/shared/api-response";
 import {
 	Body,
 	Controller,
@@ -42,6 +44,12 @@ export class PetsController {
 		@Param("studentId") studentId: string,
 		@Param("petId") petId: string,
 	) {
-		return this.petsService.delete(studentId, petId);
+		const isDeleted = this.petsService.delete(studentId, petId);
+		if (!isDeleted) {
+			throw new NotFoundException(
+				`No se encontró la mascota con ID ${petId} para el estudiante con ID ${studentId}`,
+			);
+		}
+		return ApiResponse.success(null, "Mascota eliminada con éxito");
 	}
 }
