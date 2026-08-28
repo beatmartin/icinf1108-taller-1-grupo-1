@@ -1,3 +1,5 @@
+import { NotFoundException } from "@nestjs/common";
+import { ApiResponse } from "@/shared/api-response";
 import {
 	Body,
 	Controller,
@@ -41,8 +43,13 @@ export class StudentsController {
 
 	@Delete(":id")
 	public delete(@Param("id") id: string) {
-		const deleted = this.studentsService.delete(id);
+		const isDeleted = this.studentsService.delete(id);
+		if (!isDeleted) {
+			throw new NotFoundException(
+				`No se encontró el estudiante con ID ${id}`,
+			);
+		}
 		this.petsService.deleteAllForStudent(id);
-		return deleted;
+		return ApiResponse.success(null, "Estudiante eliminado con éxito");
 	}
 }
