@@ -1,15 +1,17 @@
-import { NotFoundException } from "@nestjs/common";
-import { ApiResponse } from "@/shared/api-response";
 import {
 	Body,
 	Controller,
 	Delete,
 	Get,
+	HttpCode,
+	HttpStatus,
+	NotFoundException,
 	Param,
 	Patch,
 	Post,
 } from "@nestjs/common";
-
+import { ApiResponse } from "@/shared/api-response";
+import { Pet } from "@/pets/pets.entity";
 import { PetsService } from "@/pets/pets.service";
 import { CreatePetDto, UpdatePetDto } from "@/pets/pets.dtos";
 
@@ -23,11 +25,13 @@ export class PetsController {
 	}
 
 	@Post()
+	@HttpCode(HttpStatus.CREATED)
 	public create(
 		@Param("studentId") studentId: string,
 		@Body() body: CreatePetDto,
-	) {
-		return this.petsService.create(studentId, body);
+	): ApiResponse<Pet> {
+		const pet = this.petsService.create(studentId, body);
+		return ApiResponse.success(pet, "Mascota creada con éxito", 201);
 	}
 
 	@Patch(":petId")
