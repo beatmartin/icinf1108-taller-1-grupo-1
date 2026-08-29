@@ -35,14 +35,15 @@ export class PetsController {
 	}
 
 	@Patch(":petId")
-	public update(
+	  public update(
 		@Param("studentId") studentId: string,
 		@Param("petId") petId: string,
 		@Body() body: UpdatePetDto,
-	) {
-		return this.petsService.update(studentId, petId, body);
-	}
-
+	  ) {
+		const updatedPet = this.petsService.update(studentId, petId, body);
+		return ApiResponse.success(updatedPet, "Mascota actualizada con éxito");
+	  }
+	
 	@Delete(":petId")
 	public delete(
 		@Param("studentId") studentId: string,
