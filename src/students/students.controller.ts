@@ -39,12 +39,13 @@ export class StudentsController {
 		const student = this.studentsService.create(body);
 		return ApiResponse.success(student, "Estudiante creado con éxito", 201);
 	}
-
+	
 	@Patch(":id")
-	public update(@Param("id") id: string, @Body() body: UpdateStudentDto) {
-		return this.studentsService.update(id, body);
-	}
-
+	  public update(@Param("id") id: string, @Body() body: UpdateStudentDto) {
+		const updatedStudent = this.studentsService.update(id, body);
+		return ApiResponse.success(updatedStudent, "Estudiante actualizado con éxito");
+	  }
+	
 	@Delete(":id")
 	public delete(@Param("id") id: string) {
 		const isDeleted = this.studentsService.delete(id);
